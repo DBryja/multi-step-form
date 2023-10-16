@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { IStepMenuItem } from "../interfaces";
-import { isMedium } from "../utils";
+import { isMedium } from "../utils/utils";
 
 interface IStepMenuItemElement {
   step: IStepMenuItem;
