@@ -222,12 +222,12 @@ function App() {
   return (
     <div className="min-h-screen flex flex-row justify-center items-center bg-cgray-400">
       <div className="w-full max-md:min-h-screen md:p-4 md:h-screen md:max-h-[800px] md:max-w-[1024px] bg-white md:flex md:items-center md:rounded-2xl md:shadow-lg">
-        <div className="h-screen w-full grid max-md:grid-rows-[1fr_400px_60px] md:grid-cols-[1fr_2fr] bg-cgray-200">
+        <div className="min-h-screen w-full grid max-md:grid-rows-[min-content_1fr_min-content] md:grid-cols-[1fr_2fr]">
           <StepMenu menuSteps={menuSteps} onClick={goTo} currentStep={currentStep} />
-          <form onSubmit={handleSubmit(onSubmit)} id="form">
+          <form onSubmit={handleSubmit(onSubmit)} id="form" className="relative max-h-[500px]">
             <FormPage step={steps[currentStep]} />
           </form>
-          <div className="w-full h-full bg-red-500 flex flex-row justify-between px-6">
+          <div className="w-full h-16 bg-red-500 flex flex-row justify-between place-self-end px-6">
             {currentStep === 0 ? (
               <div />
             ) : (
