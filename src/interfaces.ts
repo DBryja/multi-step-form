@@ -6,6 +6,17 @@ export interface IStepMenuItem {
 export interface IStep {
   stepName: string;
   stepDesc: string;
-  inputs: ((key: string | number) => JSX.Element)[];
+  fields: ((key: string | number) => JSX.Element)[];
   menuItem: IStepMenuItem;
+}
+
+export enum Plan {
+  ARC = "arcade",
+  ADV = "advanced",
+  PRO = "pro",
+}
+
+export enum PayingMethod {
+  MON = "Monthly",
+  YEAR = "Yearly",
 }
