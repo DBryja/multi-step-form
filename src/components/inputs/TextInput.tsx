@@ -9,12 +9,6 @@ interface ITextInput {
 }
 
 export default function TextInput({ name, label, placeholder, isValid, ...rest }: ITextInput) {
-  // const [value, setValue] = useState("");
-
-  // const onChange = (e: ChangeEvent) => {
-  //   const target = e.target as HTMLInputElement;
-  //   setValue(target.value);
-  // };
   const inputClasses = classNames("font-medium text-base border p-2 pl-4 rounded-md", { "text-cred-400": !isValid });
   const labelClasses = classNames("text-base font-normal", { "text-cred-400": !isValid });
   return (

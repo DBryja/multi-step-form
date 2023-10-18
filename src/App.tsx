@@ -1,13 +1,14 @@
-import StepMenu from "./components/StepMenu";
-import FormPage from "./components/FormPage";
 import { useMultiStepForm } from "./hooks/useMultistepForm";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 
-import { IStepMenuItem, IStep, Plan, PayingMethod } from "./interfaces";
+import { IStepMenuItem, IStep, Plan, PayingMethod, AddOns } from "./interfaces";
+import { required, isEmail } from "./utils/validators";
+import StepMenu from "./components/StepMenu";
+import FormPage from "./components/FormPage";
 import TextInput from "./components/inputs/TextInput";
 import RadioInput from "./components/inputs/RadioInput";
-import { required, isEmail } from "./utils/validators";
 import PayToggle from "./components/inputs/PayToggle";
+import CheckboxInput from "./components/inputs/CheckboxInput";
 
 const menuSteps: IStepMenuItem[] = [
   {
@@ -38,6 +39,7 @@ interface IFormInput {
   phone: string;
   plan: Plan;
   payingMethod: PayingMethod;
+  addOns: AddOns;
 }
 const extra = "2 months free";
 
@@ -46,7 +48,6 @@ function App() {
     formState,
     handleSubmit,
     control,
-    reset,
     formState: { errors },
   } = useForm<IFormInput>({ mode: "all" });
   const { currentStep, goTo, next, back, setPayingMethod, setPlan, currentPayingMethod, currentPlan } =
@@ -64,7 +65,7 @@ function App() {
             control={control}
             rules={{
               required,
-              maxLength: { value: 32, message: "Max lenght is 32" },
+              maxLength: { value: 32, message: "Max length is 32 characters" },
             }}
             render={({ field: { onChange, onBlur } }) => (
               <TextInput
@@ -206,7 +207,56 @@ function App() {
     {
       stepName: "Pick add-ons",
       stepDesc: "Add-ons help enhance your gaming experience.",
-      fields: [],
+      fields: [
+        (key) => (
+          <Controller
+            key={key}
+            name="addOns"
+            control={control}
+            render={() => (
+              <CheckboxInput
+                name="addOns"
+                label={AddOns.OS}
+                heading="Online service"
+                desc="Access to multiplayer games"
+                price={1}
+              />
+            )}
+          />
+        ),
+        (key) => (
+          <Controller
+            key={key}
+            name="addOns"
+            control={control}
+            render={() => (
+              <CheckboxInput
+                name="addOns"
+                label={AddOns.LS}
+                heading="Larger storage"
+                desc="Extra 1TB of cloud save"
+                price={2}
+              />
+            )}
+          />
+        ),
+        (key) => (
+          <Controller
+            key={key}
+            name="addOns"
+            control={control}
+            render={() => (
+              <CheckboxInput
+                name="addOns"
+                label={AddOns.CP}
+                heading="Customizable profile"
+                desc="Custom theme on your profile"
+                price={2}
+              />
+            )}
+          />
+        ),
+      ],
       menuItem: menuSteps[2],
     },
     {
@@ -224,7 +274,7 @@ function App() {
       <div className="w-full max-md:min-h-screen md:p-4 md:h-screen md:max-h-[800px] md:max-w-[1024px] bg-white md:flex md:items-center md:rounded-2xl md:shadow-lg">
         <div className="min-h-screen w-full grid max-md:grid-rows-[min-content_1fr_min-content] md:grid-cols-[1fr_2fr]">
           <StepMenu menuSteps={menuSteps} onClick={goTo} currentStep={currentStep} />
-          <form onSubmit={handleSubmit(onSubmit)} id="form" className="relative max-h-[500px]">
+          <form onSubmit={handleSubmit(onSubmit)} id="form" className="relative max-h-[500px] transition">
             <FormPage step={steps[currentStep]} />
           </form>
           <div className="w-full h-16 bg-red-500 flex flex-row justify-between place-self-end px-6">

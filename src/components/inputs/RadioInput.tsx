@@ -31,6 +31,11 @@ export default function RadioInput({
     "bg-cgray-200": isChecked,
     "border-cblue-600": isChecked,
   });
+  const isYearly = payingMethod === PayingMethod.YEAR;
+  const extraClasses = classNames("text-base text-cblue-600 transition-all origin-top", {
+    "scale-y-0": !isYearly,
+    "scale-y-1": isYearly,
+  });
 
   return (
     <div className="pointer">
@@ -40,7 +45,7 @@ export default function RadioInput({
         <div className="flex flex-col">
           <h2 className="text-l font-bold capitalize text-cblue-600">{label}</h2>
           <p className="text-cgray-400">{payingMethod === PayingMethod.MON ? `$${priceM}/mo` : `$${priceY}/yr`}</p>
-          {payingMethod === PayingMethod.YEAR ? <p className="text-base text-cblue-600">2 months free</p> : ""}
+          <p className={extraClasses}>{extra}</p>
         </div>
       </label>
     </div>

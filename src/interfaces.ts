@@ -20,3 +20,9 @@ export enum PayingMethod {
   MON = "Monthly",
   YEAR = "Yearly",
 }
+
+export enum AddOns {
+  OS = "onlineService",
+  LS = "largerStorage",
+  CP = "customizableProfile",
+}
