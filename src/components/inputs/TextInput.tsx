@@ -9,8 +9,13 @@ interface ITextInput {
 }
 
 export default function TextInput({ name, label, placeholder, isValid, ...rest }: ITextInput) {
-  const inputClasses = classNames("font-medium text-base border p-2 pl-4 rounded-md", { "text-cred-400": !isValid });
-  const labelClasses = classNames("text-base font-normal", { "text-cred-400": !isValid });
+  const inputClasses = classNames(
+    "font-medium text-base border p-2 pl-4 rounded-md text-lg md:text-xl md:p-4 md:pl-6",
+    {
+      "text-cred-400": !isValid,
+    }
+  );
+  const labelClasses = classNames("text-base font-normal text-lg md:text-xl", { "text-cred-400": !isValid });
   return (
     <div className="flex flex-col">
       <label className={labelClasses}>{label}</label>

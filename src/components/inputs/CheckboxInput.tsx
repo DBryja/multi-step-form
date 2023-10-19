@@ -12,16 +12,16 @@ export default function CheckboxInput({ name, label, heading, desc, price }: ICh
       <input type="checkbox" name={name} id={label} value={label} className="hidden peer" />
       <label
         htmlFor={label}
-        className="flex flex-row items-center p-4 border rounded-2xl justify-between gap-3 peer-checked:bg-cgray-200 peer-checked:border-cblue-700 peer-checked:[&>.sq]:bg-cblue-700 peer-checked:[&>.sq]:border-cblue-700 [&>*]:pointer-events-none"
+        className="flex flex-row items-center p-4 border rounded-2xl justify-between gap-3 transition-colors peer-checked:bg-cgray-200 peer-checked:border-cblue-700 peer-checked:[&>.sq]:bg-cblue-700 peer-checked:[&>.sq]:border-cblue-700 [&>*]:pointer-events-none md:text-2xl md:p-6 md:justify-start md:gap-x-8 md:cursor-pointer hover:bg-cgray-200"
       >
-        <div className="w-6 h-6 border rounded sq p-1 transition-colors">
+        <div className="w-6 h-6 border rounded sq p-1 transition-colors md:w-8 md:h-8">
           <img src="/images/icon-checkmark.svg" alt="checkmark" className="w-full h-full" />
         </div>
         <div className="flex flex-col">
-          <h2 className="text-medium text-cblue-600 text-sm font-bold">{heading}</h2>
-          <p className="text-xs text-cgray-400">{desc}</p>
+          <h2 className="text-medium text-cblue-600 font-bold">{heading}</h2>
+          <p className="text-sm text-cgray-400">{desc}</p>
         </div>
-        <p className="text-cblue-700">+${price}/mo</p>
+        <p className="text-cblue-700 md:ml-auto">+${price}/mo</p>
       </label>
     </div>
   );

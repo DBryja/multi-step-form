@@ -9,6 +9,7 @@ import TextInput from "./components/inputs/TextInput";
 import RadioInput from "./components/inputs/RadioInput";
 import PayToggle from "./components/inputs/PayToggle";
 import CheckboxInput from "./components/inputs/CheckboxInput";
+import ButtonsBar from "./components/inputs/ButtonsBar";
 
 const menuSteps: IStepMenuItem[] = [
   {
@@ -262,7 +263,36 @@ function App() {
     {
       stepName: "Finishing up",
       stepDesc: "Double-check everything looks OK before confirming.",
-      fields: [],
+      fields: [
+        (key) => (
+          <Controller
+            key={key}
+            name="addOns"
+            control={control}
+            render={() => (
+              <CheckboxInput
+                name="addOns"
+                label={AddOns.OS}
+                heading="Online service"
+                desc="Access to multiplayer games"
+                price={1}
+              />
+            )}
+          />
+        ),
+        (key) => (
+          <div
+            key={key}
+            onClick={() => {
+              const formData = new FormData(document.querySelector("#form") as HTMLFormElement);
+              const values = [...formData.entries()];
+              console.log(values);
+            }}
+          >
+            AAAA
+          </div>
+        ),
+      ],
       menuItem: menuSteps[3],
     },
   ];
@@ -271,39 +301,19 @@ function App() {
 
   return (
     <div className="min-h-screen flex flex-row justify-center items-center bg-cgray-400">
-      <div className="w-full max-md:min-h-screen md:p-4 md:h-screen md:max-h-[800px] md:max-w-[1024px] bg-white md:flex md:items-center md:rounded-2xl md:shadow-lg">
-        <div className="min-h-screen w-full grid max-md:grid-rows-[min-content_1fr_min-content] md:grid-cols-[1fr_2fr]">
+      <div className="w-full max-md:min-h-screen md:p-4 md:h-screen md:max-h-[800px] md:max-w-[1200px] bg-white md:flex md:items-center md:rounded-2xl md:shadow-lg">
+        <div className="max-md:min-h-screen w-full grid max-md:grid-rows-[min-content_1fr_min-content] md:grid-cols-[1fr_2fr] md:grid-rows-[1fr_60px] md:h-full md:relative md:gap-x-12 md:pr-12">
           <StepMenu menuSteps={menuSteps} onClick={goTo} currentStep={currentStep} />
-          <form onSubmit={handleSubmit(onSubmit)} id="form" className="relative max-h-[500px] transition">
+          <form onSubmit={handleSubmit(onSubmit)} id="form" className="relative max-md:max-h-[500px] transition">
             <FormPage step={steps[currentStep]} />
           </form>
-          <div className="w-full h-16 bg-red-500 flex flex-row justify-between place-self-end px-6">
-            {currentStep === 0 ? (
-              <div />
-            ) : (
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  back();
-                }}
-              >
-                Back
-              </button>
-            )}
-
-            {currentStep === steps.length - 1 ? (
-              <input type="submit" value="Submit" onClick={() => console.log(formState.errors)} form="form" />
-            ) : (
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  next();
-                }}
-              >
-                Next
-              </button>
-            )}
-          </div>
+          <ButtonsBar
+            currentStep={currentStep}
+            length={menuSteps.length}
+            errors={formState.errors}
+            next={next}
+            back={back}
+          />
         </div>
       </div>
     </div>
