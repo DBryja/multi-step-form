@@ -1,5 +1,6 @@
 import { useMultiStepForm } from "./hooks/useMultistepForm";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
+import { useReadLocalStorage } from "usehooks-ts";
 
 import { IStepMenuItem, IStep, Plan, PayingMethod, AddOns } from "./interfaces";
 import { required, isEmail } from "./utils/validators";
@@ -51,8 +52,7 @@ function App() {
     control,
     formState: { errors },
   } = useForm<IFormInput>({ mode: "all" });
-  const { currentStep, goTo, next, back, setPayingMethod, setPlan, currentPayingMethod, currentPlan } =
-    useMultiStepForm(menuSteps.length);
+  const { currentStep, goTo, next, back, payingMethod, updatePayingMethod } = useMultiStepForm(menuSteps.length);
 
   const steps: IStep[] = [
     {
@@ -138,9 +138,7 @@ function App() {
                 type="radio"
                 name="plan"
                 img={{ src: "/images/icon-arcade.svg", alt: "Arcade" }}
-                onClick={setPlan}
-                currentPlan={currentPlan}
-                payingMethod={currentPayingMethod}
+                payingMethod={payingMethod}
                 value={Plan.ARC}
                 label={Plan.ARC}
                 priceM={9}
@@ -160,9 +158,7 @@ function App() {
                 type="radio"
                 name="plan"
                 img={{ src: "/images/icon-advanced.svg", alt: "Advance" }}
-                onClick={setPlan}
-                currentPlan={currentPlan}
-                payingMethod={currentPayingMethod}
+                payingMethod={payingMethod}
                 value={Plan.ADV}
                 label={Plan.ADV}
                 priceM={12}
@@ -182,9 +178,7 @@ function App() {
                 type="radio"
                 name="plan"
                 img={{ src: "/images/icon-pro.svg", alt: "Pro" }}
-                onClick={setPlan}
-                currentPlan={currentPlan}
-                payingMethod={currentPayingMethod}
+                payingMethod={payingMethod}
                 value={Plan.PRO}
                 label={Plan.PRO}
                 priceM={15}
@@ -199,7 +193,9 @@ function App() {
             key={key}
             name="payingMethod"
             control={control}
-            render={() => <PayToggle isActive={currentPayingMethod === PayingMethod.YEAR} onClick={setPayingMethod} />}
+            render={() => (
+              <PayToggle name="payingMethod" handleChange={updatePayingMethod} payingMethod={payingMethod} />
+            )}
           />
         ),
       ],
@@ -314,6 +310,9 @@ function App() {
             next={next}
             back={back}
           />
+          <div className="absolute left-4 top-4 text-red-500" onClick={() => console.log(errors)}>
+            ERRORS
+          </div>
         </div>
       </div>
     </div>

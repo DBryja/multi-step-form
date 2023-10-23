@@ -1,10 +1,9 @@
 import { useState } from "react";
-import { PayingMethod, Plan } from "../interfaces";
+import { PayingMethod } from "../interfaces";
 
 export function useMultiStepForm(length: number) {
   const [currentStep, setCurrentStep] = useState(0);
-  const [currentPlan, setCurrentPlan] = useState(Plan.ARC);
-  const [currentPayingMethod, setCurrentPayingMethod] = useState(PayingMethod.MON);
+  const [payingMethod, setPayingMethod] = useState(PayingMethod.MON);
 
   const next = () => {
     if (currentStep >= length - 1) setCurrentStep(currentStep);
@@ -18,24 +17,16 @@ export function useMultiStepForm(length: number) {
     const target = e.target as HTMLButtonElement;
     setCurrentStep(parseInt(target.dataset?.listpos!));
   };
-
-  const setPlan = (e: React.MouseEvent) => {
-    const target = e.target as HTMLInputElement;
-    setCurrentPlan(target.dataset.value as Plan);
-  };
-  const setPayingMethod = () => {
-    if (currentPayingMethod === PayingMethod.MON) setCurrentPayingMethod(PayingMethod.YEAR);
-    if (currentPayingMethod === PayingMethod.YEAR) setCurrentPayingMethod(PayingMethod.MON);
+  const updatePayingMethod = () => {
+    setPayingMethod(payingMethod === PayingMethod.MON ? PayingMethod.YEAR : PayingMethod.MON);
   };
 
   return {
     currentStep,
-    currentPlan,
-    currentPayingMethod,
-    setPlan,
-    setPayingMethod,
     goTo,
     next,
     back,
+    payingMethod,
+    updatePayingMethod,
   };
 }

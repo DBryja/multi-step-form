@@ -1,4 +1,5 @@
 import { AddOns } from "../../interfaces";
+import { useCheckStorage } from "../../hooks/useInputStorage";
 interface ICheckboxInput {
   name: string;
   label: AddOns;
@@ -7,9 +8,18 @@ interface ICheckboxInput {
   price?: number;
 }
 export default function CheckboxInput({ name, label, heading, desc, price }: ICheckboxInput) {
+  const { ref, updateStorage } = useCheckStorage(label);
   return (
     <div>
-      <input type="checkbox" name={name} id={label} value={label} className="hidden peer" />
+      <input
+        type="checkbox"
+        name={name}
+        id={label}
+        value={label}
+        className="hidden peer"
+        ref={ref}
+        onChange={updateStorage}
+      />
       <label
         htmlFor={label}
         className="flex flex-row items-center p-4 border rounded-2xl justify-between gap-3 transition-colors peer-checked:bg-cgray-200 peer-checked:border-cblue-700 peer-checked:[&>.sq]:bg-cblue-700 peer-checked:[&>.sq]:border-cblue-700 [&>*]:pointer-events-none md:text-2xl md:p-6 md:justify-start md:gap-x-8 md:cursor-pointer hover:bg-cgray-200"
