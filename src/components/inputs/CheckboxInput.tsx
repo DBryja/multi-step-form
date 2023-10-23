@@ -1,14 +1,24 @@
-import { AddOns } from "../../interfaces";
-import { useCheckStorage } from "../../hooks/useInputStorage";
+import { IFormFields, AddOns } from "../../interfaces";
 interface ICheckboxInput {
   name: string;
   label: AddOns;
   heading: string;
   desc: string;
   price?: number;
+  checked?: boolean;
+  handleChange?: (fields: Partial<IFormFields>) => void;
 }
-export default function CheckboxInput({ name, label, heading, desc, price }: ICheckboxInput) {
-  const { ref, updateStorage } = useCheckStorage(label);
+export default function CheckboxInput({ name, label, heading, desc, price, handleChange, checked }: ICheckboxInput) {
+  const onChange = () => {
+    // const obj = {
+    //   [name]: {
+    //     [label]: function () {
+    //       return !this;
+    //     },
+    //   },
+    // };
+    // handleChange?.(obj);
+  };
   return (
     <div>
       <input
@@ -17,8 +27,8 @@ export default function CheckboxInput({ name, label, heading, desc, price }: ICh
         id={label}
         value={label}
         className="hidden peer"
-        ref={ref}
-        onChange={updateStorage}
+        onChange={onChange}
+        checked={checked || false}
       />
       <label
         htmlFor={label}

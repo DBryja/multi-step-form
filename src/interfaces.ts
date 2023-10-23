@@ -26,3 +26,22 @@ export enum AddOns {
   LS = "largerStorage",
   CP = "customizableProfile",
 }
+
+export interface IFormFields {
+  name: string;
+  email: string;
+  phone: string;
+  payingMethod: PayingMethod;
+  plan: Plan;
+  addOns: {
+    [AddOns.CP]: boolean;
+    [AddOns.LS]: boolean;
+    [AddOns.OS]: boolean;
+  };
+}
+
+// const obj = {
+//   addOns: {
+//     [label]: true;
+//   }
+// }

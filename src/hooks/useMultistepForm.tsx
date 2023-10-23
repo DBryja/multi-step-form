@@ -1,10 +1,28 @@
 import { useState } from "react";
-import { PayingMethod } from "../interfaces";
+import { AddOns, PayingMethod, Plan, IFormFields } from "../interfaces";
 
+const INIT_VALUES = {
+  name: "",
+  email: "",
+  phone: "",
+  payingMethod: PayingMethod.MON,
+  plan: Plan.ARC,
+  addOns: {
+    [AddOns.CP]: false,
+    [AddOns.LS]: false,
+    [AddOns.OS]: false,
+  },
+};
 export function useMultiStepForm(length: number) {
   const [currentStep, setCurrentStep] = useState(0);
-  const [payingMethod, setPayingMethod] = useState(PayingMethod.MON);
+  const [data, setData] = useState<IFormFields>(INIT_VALUES);
 
+  const updateData = (fields: Partial<IFormFields>) => {
+    console.log(fields);
+    setData((prev) => {
+      return { ...prev, ...fields };
+    });
+  };
   const next = () => {
     if (currentStep >= length - 1) setCurrentStep(currentStep);
     else setCurrentStep(currentStep + 1);
@@ -18,7 +36,7 @@ export function useMultiStepForm(length: number) {
     setCurrentStep(parseInt(target.dataset?.listpos!));
   };
   const updatePayingMethod = () => {
-    setPayingMethod(payingMethod === PayingMethod.MON ? PayingMethod.YEAR : PayingMethod.MON);
+    updateData({ payingMethod: data.payingMethod === PayingMethod.MON ? PayingMethod.YEAR : PayingMethod.MON });
   };
 
   return {
@@ -26,7 +44,8 @@ export function useMultiStepForm(length: number) {
     goTo,
     next,
     back,
-    payingMethod,
+    data,
+    updateData,
     updatePayingMethod,
   };
 }

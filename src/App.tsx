@@ -1,6 +1,5 @@
 import { useMultiStepForm } from "./hooks/useMultistepForm";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
-import { useReadLocalStorage } from "usehooks-ts";
 
 import { IStepMenuItem, IStep, Plan, PayingMethod, AddOns } from "./interfaces";
 import { required, isEmail } from "./utils/validators";
@@ -52,7 +51,7 @@ function App() {
     control,
     formState: { errors },
   } = useForm<IFormInput>({ mode: "all" });
-  const { currentStep, goTo, next, back, payingMethod, updatePayingMethod } = useMultiStepForm(menuSteps.length);
+  const { currentStep, goTo, next, back, data, updateData, updatePayingMethod } = useMultiStepForm(menuSteps.length);
 
   const steps: IStep[] = [
     {
@@ -76,6 +75,8 @@ function App() {
                 label={errors.name?.message || "Name"}
                 placeholder="e.g. Stephen King"
                 isValid={errors.name ? false : true}
+                handleChange={updateData}
+                value={data.name}
               />
             )}
           />
@@ -99,6 +100,8 @@ function App() {
                 label={errors.email?.message || "Email Address"}
                 placeholder="e.g. email@lorem.com"
                 isValid={errors.email ? false : true}
+                handleChange={updateData}
+                value={data.email}
               />
             )}
           />
@@ -117,6 +120,8 @@ function App() {
                 label={errors.phone?.message || "Phone Number"}
                 placeholder="e.g. +12 345 678 90"
                 isValid={errors.phone ? false : true}
+                handleChange={updateData}
+                value={data.phone}
               />
             )}
           />
@@ -138,12 +143,13 @@ function App() {
                 type="radio"
                 name="plan"
                 img={{ src: "/images/icon-arcade.svg", alt: "Arcade" }}
-                payingMethod={payingMethod}
-                value={Plan.ARC}
                 label={Plan.ARC}
                 priceM={9}
                 priceY={90}
                 extra={extra}
+                handleChange={updateData}
+                payingMethod={data.payingMethod}
+                currentPlan={data.plan}
               />
             )}
           />
@@ -158,12 +164,13 @@ function App() {
                 type="radio"
                 name="plan"
                 img={{ src: "/images/icon-advanced.svg", alt: "Advance" }}
-                payingMethod={payingMethod}
-                value={Plan.ADV}
                 label={Plan.ADV}
                 priceM={12}
                 priceY={120}
                 extra={extra}
+                handleChange={updateData}
+                payingMethod={data.payingMethod}
+                currentPlan={data.plan}
               />
             )}
           />
@@ -178,12 +185,13 @@ function App() {
                 type="radio"
                 name="plan"
                 img={{ src: "/images/icon-pro.svg", alt: "Pro" }}
-                payingMethod={payingMethod}
-                value={Plan.PRO}
                 label={Plan.PRO}
                 priceM={15}
                 priceY={150}
                 extra={extra}
+                handleChange={updateData}
+                payingMethod={data.payingMethod}
+                currentPlan={data.plan}
               />
             )}
           />
@@ -194,7 +202,7 @@ function App() {
             name="payingMethod"
             control={control}
             render={() => (
-              <PayToggle name="payingMethod" handleChange={updatePayingMethod} payingMethod={payingMethod} />
+              <PayToggle name="payingMethod" handleChange={updatePayingMethod} payingMethod={data.payingMethod} />
             )}
           />
         ),
@@ -217,6 +225,8 @@ function App() {
                 heading="Online service"
                 desc="Access to multiplayer games"
                 price={1}
+                handleChange={updateData}
+                checked={data.addOns.onlineService}
               />
             )}
           />
@@ -233,6 +243,8 @@ function App() {
                 heading="Larger storage"
                 desc="Extra 1TB of cloud save"
                 price={2}
+                handleChange={updateData}
+                checked={data.addOns.largerStorage}
               />
             )}
           />
@@ -249,6 +261,8 @@ function App() {
                 heading="Customizable profile"
                 desc="Custom theme on your profile"
                 price={2}
+                handleChange={updateData}
+                checked={data.addOns.customizableProfile}
               />
             )}
           />

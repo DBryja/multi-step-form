@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { PayingMethod, Plan } from "../../interfaces";
-import { useRadioStorage } from "../../hooks/useInputStorage";
+import { IFormFields } from "../../interfaces";
 
 export interface IRadioInput {
   name: string;
@@ -9,6 +9,8 @@ export interface IRadioInput {
   priceM?: number;
   priceY?: number;
   payingMethod?: string;
+  currentPlan?: Plan;
+  handleChange?: (fields: Partial<IFormFields>) => void;
   [x: string]: any;
 }
 
@@ -20,11 +22,12 @@ export default function RadioInput({
   priceM,
   priceY,
   payingMethod,
+  currentPlan,
+  handleChange,
   extra,
   ...rest
 }: IRadioInput) {
-  const { ref, updateStorage, currentPlan } = useRadioStorage(name);
-  const isChecked = label === currentPlan;
+  const isChecked = currentPlan === label;
   const classes = classNames(
     "w-full h-full flex max-md:flex-row p-4 border rounded-2xl gap-4 transition-all duration-300 cursor-pointer [&>*]:pointer-events-none md:flex-col md:gap-8",
     {
@@ -41,17 +44,23 @@ export default function RadioInput({
     "scale-y-1": isYearly,
   });
 
+  const onChange = () => {
+    handleChange?.({ [name]: label });
+  };
+
   return (
     <div className="pointer">
-      <input className="hidden" type="radio" value={label} name={name} ref={ref} readOnly {...rest} />
-      <label
-        htmlFor={label}
-        className={classes}
-        data-value={label}
-        onClick={() => {
-          updateStorage(label);
-        }}
-      >
+      <input
+        className="hidden"
+        type="radio"
+        id={label}
+        value={label}
+        name={name}
+        readOnly
+        onChange={onChange}
+        {...rest}
+      />
+      <label htmlFor={label} className={classes} data-value={label}>
         {img && <img src={img.src} alt={img.alt} className="md:w-1/2 self-center" />}
         <div className="flex flex-col">
           <h2 className="text-l font-bold capitalize text-cblue-600 md:text-2xl">{label}</h2>

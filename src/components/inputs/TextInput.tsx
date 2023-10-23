@@ -1,6 +1,5 @@
 // import { useState, useEffect, ChangeEvent } from "react";
 import classNames from "classnames";
-import { useValueStorage } from "../../hooks/useInputStorage";
 
 interface ITextInput {
   name: string;
@@ -10,9 +9,7 @@ interface ITextInput {
   [x: string]: any;
 }
 
-export default function TextInput({ name, label, placeholder, isValid, onChange, ...rest }: ITextInput) {
-  const { ref, updateStorage } = useValueStorage(name);
-
+export default function TextInput({ name, label, placeholder, isValid, handleChange, onChange, ...rest }: ITextInput) {
   const inputClasses = classNames(
     "font-medium text-base border p-2 pl-4 rounded-md text-lg md:text-xl md:p-4 md:pl-6",
     {
@@ -22,8 +19,9 @@ export default function TextInput({ name, label, placeholder, isValid, onChange,
 
   // onChange is coming from react-hook-form, it has to be combined within a function to use own onChange functions simultanously
   const onValueChange = (e: React.SyntheticEvent) => {
-    updateStorage(e);
-    if (onChange) onChange(e);
+    const node = e.target as HTMLInputElement;
+    handleChange({ [name]: node.value });
+    onChange?.(e);
   };
 
   const labelClasses = classNames("text-base font-normal text-lg md:text-xl", { "text-cred-400": !isValid });
@@ -36,7 +34,6 @@ export default function TextInput({ name, label, placeholder, isValid, onChange,
         name={name}
         placeholder={placeholder}
         {...rest}
-        ref={ref}
         onChange={onValueChange}
       />
     </div>
