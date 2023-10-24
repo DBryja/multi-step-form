@@ -18,7 +18,6 @@ export function useMultiStepForm(length: number) {
   const [data, setData] = useState<IFormFields>(INIT_VALUES);
 
   const updateData = (fields: Partial<IFormFields>) => {
-    console.log(fields);
     setData((prev) => {
       return { ...prev, ...fields };
     });

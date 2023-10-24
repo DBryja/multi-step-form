@@ -5,9 +5,8 @@ import { IFormFields } from "../../interfaces";
 export interface IRadioInput {
   name: string;
   label: Plan;
+  price: number;
   img?: { src: string; alt: string };
-  priceM?: number;
-  priceY?: number;
   payingMethod?: string;
   currentPlan?: Plan;
   handleChange?: (fields: Partial<IFormFields>) => void;
@@ -19,8 +18,7 @@ export default function RadioInput({
   label,
   img,
   onClick,
-  priceM,
-  priceY,
+  price,
   payingMethod,
   currentPlan,
   handleChange,
@@ -39,6 +37,7 @@ export default function RadioInput({
     }
   );
   const isYearly = payingMethod === PayingMethod.YEAR;
+  const printPricing = (price: number) => `$${price * (isYearly ? 10 : 1)}/${isYearly ? "yr" : "mo"}`;
   const extraClasses = classNames("text-base text-cblue-600 transition-all origin-top", {
     "scale-y-0": !isYearly,
     "scale-y-1": isYearly,
@@ -64,9 +63,7 @@ export default function RadioInput({
         {img && <img src={img.src} alt={img.alt} className="md:w-1/2 self-center" />}
         <div className="flex flex-col">
           <h2 className="text-l font-bold capitalize text-cblue-600 md:text-2xl">{label}</h2>
-          <p className="text-cgray-400 md:text-xl">
-            {payingMethod === PayingMethod.MON ? `$${priceM}/mo` : `$${priceY}/yr`}
-          </p>
+          <p className="text-cgray-400 md:text-xl">{printPricing(price)}</p>
           <p className={extraClasses}>{extra}</p>
         </div>
       </label>

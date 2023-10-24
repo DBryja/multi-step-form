@@ -2,7 +2,7 @@ import { useMultiStepForm } from "./hooks/useMultistepForm";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 
 import { IStepMenuItem, IStep, Plan, PayingMethod, AddOns } from "./interfaces";
-import { required, isEmail } from "./utils/validators";
+import { required, isEmail, isPhoneNumber } from "./utils/validators";
 import StepMenu from "./components/StepMenu";
 import FormPage from "./components/FormPage";
 import TextInput from "./components/inputs/TextInput";
@@ -11,6 +11,14 @@ import PayToggle from "./components/inputs/PayToggle";
 import CheckboxInput from "./components/inputs/CheckboxInput";
 import ButtonsBar from "./components/inputs/ButtonsBar";
 
+interface IFormInput {
+  name: string;
+  email: string;
+  phone: string;
+  plan: Plan;
+  payingMethod: PayingMethod;
+  addOns: AddOns;
+}
 const menuSteps: IStepMenuItem[] = [
   {
     listpos: 0,
@@ -33,16 +41,72 @@ const menuSteps: IStepMenuItem[] = [
     desc: "summary",
   },
 ];
-
-interface IFormInput {
-  name: string;
-  email: string;
-  phone: string;
-  plan: Plan;
-  payingMethod: PayingMethod;
-  addOns: AddOns;
-}
 const extra = "2 months free";
+const fieldValues: any = {
+  textInputs: {
+    name: {
+      name: "name",
+      label: "Name",
+      placeholder: "e.g Stephen King",
+    },
+    email: {
+      name: "email",
+      label: "Email Address",
+      placeholder: "e.g stephen@lorem.com",
+    },
+    phone: {
+      name: "phone",
+      label: "Phone Number",
+      placeholder: "e.g. +12 345 678 90",
+    },
+  },
+  radioInputs: {
+    arcade: {
+      name: "plan",
+      img: { src: "/images/icon-arcade.svg", alt: "Arcade" },
+      label: Plan.ARC,
+      price: 9,
+      extra,
+    },
+    advanced: {
+      name: "plan",
+      img: { src: "/images/icon-advanced.svg", alt: "Advance" },
+      label: Plan.ADV,
+      price: 12,
+      extra,
+    },
+    pro: {
+      name: "plan",
+      img: { src: "/images/icon-pro.svg", alt: "Pro" },
+      label: Plan.PRO,
+      price: 15,
+      extra,
+    },
+  },
+  checkboxes: {
+    onlineService: {
+      name: "addOns",
+      label: AddOns.OS,
+      heading: "Online service",
+      desc: "Access to multiplayer games",
+      price: 1,
+    },
+    largerStorage: {
+      name: "addOns",
+      label: AddOns.LS,
+      heading: "Larger storage",
+      desc: "Extra 1TB of cloud save",
+      price: 2,
+    },
+    customizableProfile: {
+      name: "addOns",
+      label: AddOns.CP,
+      heading: "Customizable profile",
+      desc: "Custom theme on your profile",
+      price: 2,
+    },
+  },
+};
 
 function App() {
   const {
@@ -52,6 +116,15 @@ function App() {
     formState: { errors },
   } = useForm<IFormInput>({ mode: "all" });
   const { currentStep, goTo, next, back, data, updateData, updatePayingMethod } = useMultiStepForm(menuSteps.length);
+  const isYearly = data.payingMethod === PayingMethod.YEAR;
+  const printPricing = (price: number) => `$${price * (isYearly ? 10 : 1)}/${isYearly ? "yr" : "mo"}`;
+
+  const addOnsPrice = Object.keys(data.addOns)
+    .map((key) => {
+      return (data.addOns[key as AddOns] && fieldValues.checkboxes[key].price) || 0;
+    })
+    .reduce((partialSum, a) => partialSum + a, 0);
+  const price: number = fieldValues.radioInputs[data.plan].price + addOnsPrice;
 
   const steps: IStep[] = [
     {
@@ -71,9 +144,8 @@ function App() {
               <TextInput
                 onChange={onChange}
                 onBlur={onBlur}
-                name="name"
-                label={errors.name?.message || "Name"}
-                placeholder="e.g. Stephen King"
+                {...fieldValues.textInputs.name}
+                label={errors.name?.message || fieldValues.textInputs.name.label}
                 isValid={errors.name ? false : true}
                 handleChange={updateData}
                 value={data.name}
@@ -96,9 +168,8 @@ function App() {
               <TextInput
                 onChange={onChange}
                 onBlur={onBlur}
-                name="email"
-                label={errors.email?.message || "Email Address"}
-                placeholder="e.g. email@lorem.com"
+                {...fieldValues.textInputs.email}
+                label={errors.email?.message || fieldValues.textInputs.email.label}
                 isValid={errors.email ? false : true}
                 handleChange={updateData}
                 value={data.email}
@@ -111,14 +182,13 @@ function App() {
             name="phone"
             key={key}
             control={control}
-            rules={{ required: true, minLength: 7, maxLength: 12 }}
+            rules={{ required: true, minLength: 5, maxLength: 18, validate: { isPhoneNumber } }}
             render={({ field: { onChange, onBlur } }) => (
               <TextInput
                 onChange={onChange}
                 onBlur={onBlur}
-                name="phone"
-                label={errors.phone?.message || "Phone Number"}
-                placeholder="e.g. +12 345 678 90"
+                {...fieldValues.textInputs.phone}
+                label={errors.phone?.message || fieldValues.textInputs.phone.label}
                 isValid={errors.phone ? false : true}
                 handleChange={updateData}
                 value={data.phone}
@@ -134,77 +204,37 @@ function App() {
       stepDesc: "You have the option of monthly or yearly billing",
       fields: [
         (key) => (
-          <Controller
+          <RadioInput
             key={key}
-            name="plan"
-            control={control}
-            render={() => (
-              <RadioInput
-                type="radio"
-                name="plan"
-                img={{ src: "/images/icon-arcade.svg", alt: "Arcade" }}
-                label={Plan.ARC}
-                priceM={9}
-                priceY={90}
-                extra={extra}
-                handleChange={updateData}
-                payingMethod={data.payingMethod}
-                currentPlan={data.plan}
-              />
-            )}
+            type="radio"
+            {...fieldValues.radioInputs.arcade}
+            handleChange={updateData}
+            payingMethod={data.payingMethod}
+            currentPlan={data.plan}
           />
         ),
         (key) => (
-          <Controller
+          <RadioInput
             key={key}
-            name="plan"
-            control={control}
-            render={() => (
-              <RadioInput
-                type="radio"
-                name="plan"
-                img={{ src: "/images/icon-advanced.svg", alt: "Advance" }}
-                label={Plan.ADV}
-                priceM={12}
-                priceY={120}
-                extra={extra}
-                handleChange={updateData}
-                payingMethod={data.payingMethod}
-                currentPlan={data.plan}
-              />
-            )}
+            type="radio"
+            {...fieldValues.radioInputs.advanced}
+            handleChange={updateData}
+            payingMethod={data.payingMethod}
+            currentPlan={data.plan}
           />
         ),
         (key) => (
-          <Controller
+          <RadioInput
+            type="radio"
             key={key}
-            name="plan"
-            control={control}
-            render={() => (
-              <RadioInput
-                type="radio"
-                name="plan"
-                img={{ src: "/images/icon-pro.svg", alt: "Pro" }}
-                label={Plan.PRO}
-                priceM={15}
-                priceY={150}
-                extra={extra}
-                handleChange={updateData}
-                payingMethod={data.payingMethod}
-                currentPlan={data.plan}
-              />
-            )}
+            {...fieldValues.radioInputs.pro}
+            handleChange={updateData}
+            payingMethod={data.payingMethod}
+            currentPlan={data.plan}
           />
         ),
         (key) => (
-          <Controller
-            key={key}
-            name="payingMethod"
-            control={control}
-            render={() => (
-              <PayToggle name="payingMethod" handleChange={updatePayingMethod} payingMethod={data.payingMethod} />
-            )}
-          />
+          <PayToggle key={key} name="payingMethod" handleChange={updatePayingMethod} payingMethod={data.payingMethod} />
         ),
       ],
       menuItem: menuSteps[1],
@@ -220,13 +250,11 @@ function App() {
             control={control}
             render={() => (
               <CheckboxInput
-                name="addOns"
-                label={AddOns.OS}
-                heading="Online service"
-                desc="Access to multiplayer games"
-                price={1}
+                {...fieldValues.checkboxes.onlineService}
+                payingMethod={data.payingMethod}
                 handleChange={updateData}
                 checked={data.addOns.onlineService}
+                data={data.addOns}
               />
             )}
           />
@@ -238,13 +266,11 @@ function App() {
             control={control}
             render={() => (
               <CheckboxInput
-                name="addOns"
-                label={AddOns.LS}
-                heading="Larger storage"
-                desc="Extra 1TB of cloud save"
-                price={2}
+                {...fieldValues.checkboxes.largerStorage}
+                payingMethod={data.payingMethod}
                 handleChange={updateData}
                 checked={data.addOns.largerStorage}
+                data={data.addOns}
               />
             )}
           />
@@ -256,13 +282,11 @@ function App() {
             control={control}
             render={() => (
               <CheckboxInput
-                name="addOns"
-                label={AddOns.CP}
-                heading="Customizable profile"
-                desc="Custom theme on your profile"
-                price={2}
+                {...fieldValues.checkboxes.customizableProfile}
+                payingMethod={data.payingMethod}
                 handleChange={updateData}
                 checked={data.addOns.customizableProfile}
+                data={data.addOns}
               />
             )}
           />
@@ -275,31 +299,40 @@ function App() {
       stepDesc: "Double-check everything looks OK before confirming.",
       fields: [
         (key) => (
-          <Controller
-            key={key}
-            name="addOns"
-            control={control}
-            render={() => (
-              <CheckboxInput
-                name="addOns"
-                label={AddOns.OS}
-                heading="Online service"
-                desc="Access to multiplayer games"
-                price={1}
-              />
-            )}
-          />
+          <div key={key} className="flex flex-row justify-between">
+            <div>
+              <p className="capitalize font-medium">
+                {data.plan} ({data.payingMethod})
+              </p>
+              <button
+                onClick={(e: React.SyntheticEvent) => {
+                  e.preventDefault();
+                  updatePayingMethod();
+                }}
+              >
+                Change
+              </button>
+            </div>
+            <p>{printPricing(fieldValues.radioInputs[data.plan].price)}</p>
+          </div>
         ),
         (key) => (
-          <div
-            key={key}
-            onClick={() => {
-              const formData = new FormData(document.querySelector("#form") as HTMLFormElement);
-              const values = [...formData.entries()];
-              console.log(values);
-            }}
-          >
-            AAAA
+          <div key={key}>
+            {Object.keys(data.addOns).map((addOn, index) =>
+              data.addOns[addOn as AddOns] ? (
+                <div key={index} className="flex flex-row justify-between">
+                  {fieldValues.checkboxes[addOn].heading}
+                  <p>{printPricing(fieldValues.checkboxes[addOn].price)}</p>
+                </div>
+              ) : (
+                ""
+              )
+            )}
+          </div>
+        ),
+        (key) => (
+          <div key={key} className="flex flex-row justify-between">
+            Total: <p>{printPricing(price)}</p>
           </div>
         ),
       ],

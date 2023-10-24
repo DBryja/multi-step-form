@@ -27,17 +27,19 @@ export enum AddOns {
   CP = "customizableProfile",
 }
 
+export interface AddOnsObject {
+  [AddOns.CP]: boolean;
+  [AddOns.LS]: boolean;
+  [AddOns.OS]: boolean;
+}
+
 export interface IFormFields {
   name: string;
   email: string;
   phone: string;
   payingMethod: PayingMethod;
   plan: Plan;
-  addOns: {
-    [AddOns.CP]: boolean;
-    [AddOns.LS]: boolean;
-    [AddOns.OS]: boolean;
-  };
+  addOns: AddOnsObject;
 }
 
 // const obj = {

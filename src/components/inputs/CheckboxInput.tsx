@@ -1,24 +1,42 @@
-import { IFormFields, AddOns } from "../../interfaces";
+import { IFormFields, AddOns, AddOnsObject, PayingMethod } from "../../interfaces";
 interface ICheckboxInput {
   name: string;
   label: AddOns;
   heading: string;
   desc: string;
+  payingMethod?: PayingMethod;
   price?: number;
   checked?: boolean;
+  data?: AddOnsObject;
   handleChange?: (fields: Partial<IFormFields>) => void;
 }
-export default function CheckboxInput({ name, label, heading, desc, price, handleChange, checked }: ICheckboxInput) {
-  const onChange = () => {
-    // const obj = {
-    //   [name]: {
-    //     [label]: function () {
-    //       return !this;
-    //     },
-    //   },
-    // };
-    // handleChange?.(obj);
-  };
+export default function CheckboxInput({
+  name,
+  label,
+  heading,
+  desc,
+  price,
+  payingMethod,
+  handleChange,
+  checked,
+  data,
+}: ICheckboxInput) {
+  let onChange;
+  if (checked !== undefined && data) {
+    onChange = () => {
+      const obj = {
+        [name]: {
+          ...data,
+          [label]: !checked,
+        },
+      };
+      handleChange?.(obj);
+    };
+  }
+
+  const isYearly = payingMethod === PayingMethod.YEAR;
+  const printPricing = (price: number) => `$${price * (isYearly ? 10 : 1)}/${isYearly ? "yr" : "mo"}`;
+
   return (
     <div>
       <input
@@ -41,7 +59,7 @@ export default function CheckboxInput({ name, label, heading, desc, price, handl
           <h2 className="text-medium text-cblue-600 font-bold">{heading}</h2>
           <p className="text-sm text-cgray-400">{desc}</p>
         </div>
-        <p className="text-cblue-700 md:ml-auto">+${price}/mo</p>
+        {price && <p className="text-cblue-700 md:ml-auto">{printPricing(price)}</p>}
       </label>
     </div>
   );

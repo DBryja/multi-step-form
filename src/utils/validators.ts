@@ -6,5 +6,10 @@ export function minmaxLen(value: string, max: number, min: number = 0) {
 // export function isEmail(value: string) {
 //   return value.includes("@") && !value.includes(" ");
 // }
-export const isEmail = (e: string) =>
-  e.includes("@") && !e.includes(" ") ? true : "Input value must be a proper email address";
+export const isEmail = (value: string) =>
+  value.includes("@") && !value.includes(" ") ? true : "Input value must be a proper email address";
+
+export const isPhoneNumber = (value: string) => {
+  let regex = /[0-9]-+ /;
+  return regex.test(value) ? true : "Phone number can contain only numbers and '- +' symbols";
+};
