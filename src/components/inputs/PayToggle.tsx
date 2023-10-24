@@ -22,11 +22,11 @@ export default function PayToggle({ name, payingMethod, handleChange }: IPayTogg
     handleChange?.();
   };
   return (
-    <div className="flex justify-center items-center md:col-span-3 md:w-80 md:justify-self-center md:scale-110 ">
+    <div className="flex justify-center items-center md:col-span-3 md:w-80 md:justify-self-center md:self-center md:scale-110">
       <input type="checkbox" id={name} name={name} onChange={onChange} className="hidden" />
       <label
         htmlFor={name}
-        className="flex flex-row w-full justify-evenly [&>p]:leading-8 md:cursor-pointer md:bg-cgray-200 py-4 rounded-xl [&>*]:pointer-events-none"
+        className="flex flex-row w-full justify-evenly [&>p]:leading-8 md:cursor-pointer md:bg-cgray-200 md:py-4 md:px-8 rounded-xl [&>*]:pointer-events-none"
       >
         <p className={leftClasses}>Monthly</p>
         <Toggle isActive={isActive} />

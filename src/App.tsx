@@ -182,7 +182,12 @@ function App() {
             name="phone"
             key={key}
             control={control}
-            rules={{ required: true, minLength: 5, maxLength: 18, validate: { isPhoneNumber } }}
+            rules={{
+              required: true,
+              minLength: { value: 7, message: "Must be at least 7 characters" },
+              maxLength: { value: 18, message: "Max length is 18 characters" },
+              validate: { isPhoneNumber },
+            }}
             render={({ field: { onChange, onBlur } }) => (
               <TextInput
                 onChange={onChange}
@@ -291,6 +296,9 @@ function App() {
             )}
           />
         ),
+        (key) => (
+          <PayToggle key={key} name="payingMethod" handleChange={updatePayingMethod} payingMethod={data.payingMethod} />
+        ),
       ],
       menuItem: menuSteps[2],
     },
@@ -299,40 +307,42 @@ function App() {
       stepDesc: "Double-check everything looks OK before confirming.",
       fields: [
         (key) => (
-          <div key={key} className="flex flex-row justify-between">
-            <div>
-              <p className="capitalize font-medium">
-                {data.plan} ({data.payingMethod})
-              </p>
-              <button
-                onClick={(e: React.SyntheticEvent) => {
-                  e.preventDefault();
-                  updatePayingMethod();
-                }}
-              >
-                Change
-              </button>
+          <div className="bg-cgray-100 p-4 md:p-8 rounded-xl md:text-xl">
+            <div key={key} className="flex flex-row justify-between pb-2 md:pb-6">
+              <div>
+                <p className="capitalize font-medium">
+                  {data.plan} ({data.payingMethod})
+                </p>
+                <button
+                  onClick={(e: React.SyntheticEvent) => {
+                    e.preventDefault();
+                    updatePayingMethod();
+                  }}
+                  className="underline decoration-2 text-cgray-400 transition-colors hover:text-cblue-600"
+                >
+                  Change
+                </button>
+              </div>
+              <p>{printPricing(fieldValues.radioInputs[data.plan].price)}</p>
             </div>
-            <p>{printPricing(fieldValues.radioInputs[data.plan].price)}</p>
+
+            <div className="flex flex-col text-cgray-400 gap-3 md:gap-6 [&:has(div)]:border-t [&:has(div)]:pt-3 [&:has(div)]:md:pt-6">
+              {Object.keys(data.addOns).map((addOn, index) =>
+                data.addOns[addOn as AddOns] ? (
+                  <div key={index} className="flex flex-row justify-between">
+                    {fieldValues.checkboxes[addOn].heading}
+                    <p className="text-cblue-600">+{printPricing(fieldValues.checkboxes[addOn].price)}</p>
+                  </div>
+                ) : (
+                  ""
+                )
+              )}
+            </div>
           </div>
         ),
         (key) => (
-          <div key={key}>
-            {Object.keys(data.addOns).map((addOn, index) =>
-              data.addOns[addOn as AddOns] ? (
-                <div key={index} className="flex flex-row justify-between">
-                  {fieldValues.checkboxes[addOn].heading}
-                  <p>{printPricing(fieldValues.checkboxes[addOn].price)}</p>
-                </div>
-              ) : (
-                ""
-              )
-            )}
-          </div>
-        ),
-        (key) => (
-          <div key={key} className="flex flex-row justify-between">
-            Total: <p>{printPricing(price)}</p>
+          <div key={key} className="flex flex-row justify-between px-4 text-cgray-400 text-l md:text-2xl">
+            Total: (per {isYearly ? "year" : "month"})<p className="text-cblue-700 font-bold">{printPricing(price)}</p>
           </div>
         ),
       ],
@@ -343,11 +353,11 @@ function App() {
   const onSubmit: SubmitHandler<IFormInput> = (data: any) => console.log(data);
 
   return (
-    <div className="min-h-screen flex flex-row justify-center items-center bg-cgray-400">
-      <div className="w-full max-md:min-h-screen md:p-4 md:h-screen md:max-h-[800px] md:max-w-[1200px] bg-white md:flex md:items-center md:rounded-2xl md:shadow-lg">
-        <div className="max-md:min-h-screen w-full grid max-md:grid-rows-[min-content_1fr_min-content] md:grid-cols-[1fr_2fr] md:grid-rows-[1fr_60px] md:h-full md:relative md:gap-x-12 md:pr-12">
+    <div className="h-screen flex flex-col justify-center items-center bg-cgray-400">
+      <div className="h-full w-full md:p-4 md:h-csreen md:max-h-[800px] md:max-w-[1200px] bg-white md:flex md:items-center md:rounded-2xl md:shadow-lg">
+        <div className="h-[calc(100%-20px)] md:w-full grid max-md:grid-rows-[min-content_1fr_min-content] md:grid-cols-[1fr_2fr] md:grid-rows-[1fr_60px] md:h-full md:relative md:gap-x-12 md:pr-12">
           <StepMenu menuSteps={menuSteps} onClick={goTo} currentStep={currentStep} />
-          <form onSubmit={handleSubmit(onSubmit)} id="form" className="relative max-md:max-h-[500px] transition">
+          <form onSubmit={handleSubmit(onSubmit)} id="form" className="relative max-md:max-h-[400px] transition">
             <FormPage step={steps[currentStep]} />
           </form>
           <ButtonsBar
@@ -361,6 +371,27 @@ function App() {
             ERRORS
           </div>
         </div>
+      </div>
+      <div className="text-sm align-center">
+        Challenge by{" "}
+        <a
+          href="https://www.frontendmentor.io?ref=challenge"
+          target="_blank"
+          className="text-blue-600"
+          rel="noopener noreferrer"
+        >
+          Frontend Mentor
+        </a>
+        . Coded by{" "}
+        <a
+          href="https://www.linkedin.com/in/dawid-bryja-898134249/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-600"
+        >
+          Dawid Bryja
+        </a>
+        .
       </div>
     </div>
   );

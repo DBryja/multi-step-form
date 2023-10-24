@@ -7,7 +7,7 @@ interface IButtonsBar {
 }
 export default function ButtonsBar({ currentStep, length, errors, back, next }: IButtonsBar) {
   return (
-    <div className="w-full pb-2 h-16 flex flex-row justify-between place-self-end px-8 md:px-24 font-medium">
+    <div className="w-full pb-2 h-16 flex flex-row justify-between place-self-end px-8 md:px-24 font-medium items-center">
       {currentStep === 0 ? (
         <div />
       ) : (
@@ -16,7 +16,7 @@ export default function ButtonsBar({ currentStep, length, errors, back, next }: 
             e.preventDefault();
             back();
           }}
-          className="bg-cgray-200 px-8 rounded-xl cursor-pointer"
+          className="bg-cgray-200 h-[90%] px-8 rounded-xl cursor-pointer"
         >
           Go Back
         </button>
@@ -28,7 +28,7 @@ export default function ButtonsBar({ currentStep, length, errors, back, next }: 
           value="Submit"
           onClick={() => console.log(errors)}
           form="form"
-          className="bg-cblue-700 px-8 text-white rounded-xl cursor-pointer transition-opacity hover:opacity-95"
+          className="bg-cblue-700 h-[90%] px-8 text-white rounded-xl cursor-pointer transition-opacity hover:opacity-95"
         />
       ) : (
         <button
@@ -36,7 +36,7 @@ export default function ButtonsBar({ currentStep, length, errors, back, next }: 
             e.preventDefault();
             next();
           }}
-          className="bg-cblue-600 px-8 text-white rounded-xl transition-opacity hover:opacity-95"
+          className="bg-cblue-600 h-[90%] px-8 text-white rounded-xl transition-opacity hover:opacity-95"
         >
           Next Step
         </button>
