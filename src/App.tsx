@@ -1,7 +1,7 @@
 import { useMultiStepForm } from "./hooks/useMultistepForm";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 
-import { IStepMenuItem, IStep, Plan, PayingMethod, AddOns } from "./interfaces";
+import { IStepMenuItem, IStep, Plan, PayingMethod, AddOns, IFieldValues } from "./interfaces";
 import { required, isEmail, isPhoneNumber } from "./utils/validators";
 import StepMenu from "./components/StepMenu";
 import FormPage from "./components/FormPage";
@@ -10,6 +10,13 @@ import RadioInput from "./components/inputs/RadioInput";
 import PayToggle from "./components/inputs/PayToggle";
 import CheckboxInput from "./components/inputs/CheckboxInput";
 import ButtonsBar from "./components/inputs/ButtonsBar";
+import SummaryPage from "./components/SummaryPage";
+
+import _fieldValues from "./content.json";
+import Footer from "./components/Footer";
+import TestingButton from "./components/TestingButton";
+import SuccessPage from "./components/SuccessPage";
+const fieldValues = _fieldValues as IFieldValues;
 
 interface IFormInput {
   name: string;
@@ -41,91 +48,29 @@ const menuSteps: IStepMenuItem[] = [
     desc: "summary",
   },
 ];
-const extra = "2 months free";
-const fieldValues: any = {
-  textInputs: {
-    name: {
-      name: "name",
-      label: "Name",
-      placeholder: "e.g Stephen King",
-    },
-    email: {
-      name: "email",
-      label: "Email Address",
-      placeholder: "e.g stephen@lorem.com",
-    },
-    phone: {
-      name: "phone",
-      label: "Phone Number",
-      placeholder: "e.g. +12 345 678 90",
-    },
-  },
-  radioInputs: {
-    arcade: {
-      name: "plan",
-      img: { src: "/images/icon-arcade.svg", alt: "Arcade" },
-      label: Plan.ARC,
-      price: 9,
-      extra,
-    },
-    advanced: {
-      name: "plan",
-      img: { src: "/images/icon-advanced.svg", alt: "Advance" },
-      label: Plan.ADV,
-      price: 12,
-      extra,
-    },
-    pro: {
-      name: "plan",
-      img: { src: "/images/icon-pro.svg", alt: "Pro" },
-      label: Plan.PRO,
-      price: 15,
-      extra,
-    },
-  },
-  checkboxes: {
-    onlineService: {
-      name: "addOns",
-      label: AddOns.OS,
-      heading: "Online service",
-      desc: "Access to multiplayer games",
-      price: 1,
-    },
-    largerStorage: {
-      name: "addOns",
-      label: AddOns.LS,
-      heading: "Larger storage",
-      desc: "Extra 1TB of cloud save",
-      price: 2,
-    },
-    customizableProfile: {
-      name: "addOns",
-      label: AddOns.CP,
-      heading: "Customizable profile",
-      desc: "Custom theme on your profile",
-      price: 2,
-    },
-  },
-};
+
+//remove in release version
+declare global {
+  interface Window {
+    testingMode: boolean;
+  }
+}
 
 function App() {
   const {
-    formState,
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors, isSubmitSuccessful },
   } = useForm<IFormInput>({ mode: "all" });
   const { currentStep, goTo, next, back, data, updateData, updatePayingMethod } = useMultiStepForm(menuSteps.length);
   const isYearly = data.payingMethod === PayingMethod.YEAR;
   const printPricing = (price: number) => `$${price * (isYearly ? 10 : 1)}/${isYearly ? "yr" : "mo"}`;
-
   const addOnsPrice = Object.keys(data.addOns)
     .map((key) => {
       return (data.addOns[key as AddOns] && fieldValues.checkboxes[key].price) || 0;
     })
     .reduce((partialSum, a) => partialSum + a, 0);
   const price: number = fieldValues.radioInputs[data.plan].price + addOnsPrice;
-
   const steps: IStep[] = [
     {
       stepName: "Personal info",
@@ -183,7 +128,7 @@ function App() {
             key={key}
             control={control}
             rules={{
-              required: true,
+              required,
               minLength: { value: 7, message: "Must be at least 7 characters" },
               maxLength: { value: 18, message: "Max length is 18 characters" },
               validate: { isPhoneNumber },
@@ -307,38 +252,13 @@ function App() {
       stepDesc: "Double-check everything looks OK before confirming.",
       fields: [
         (key) => (
-          <div className="bg-cgray-100 p-4 md:p-8 rounded-xl md:text-xl">
-            <div key={key} className="flex flex-row justify-between pb-2 md:pb-6">
-              <div>
-                <p className="capitalize font-medium">
-                  {data.plan} ({data.payingMethod})
-                </p>
-                <button
-                  onClick={(e: React.SyntheticEvent) => {
-                    e.preventDefault();
-                    updatePayingMethod();
-                  }}
-                  className="underline decoration-2 text-cgray-400 transition-colors hover:text-cblue-600"
-                >
-                  Change
-                </button>
-              </div>
-              <p>{printPricing(fieldValues.radioInputs[data.plan].price)}</p>
-            </div>
-
-            <div className="flex flex-col text-cgray-400 gap-3 md:gap-6 [&:has(div)]:border-t [&:has(div)]:pt-3 [&:has(div)]:md:pt-6">
-              {Object.keys(data.addOns).map((addOn, index) =>
-                data.addOns[addOn as AddOns] ? (
-                  <div key={index} className="flex flex-row justify-between">
-                    {fieldValues.checkboxes[addOn].heading}
-                    <p className="text-cblue-600">+{printPricing(fieldValues.checkboxes[addOn].price)}</p>
-                  </div>
-                ) : (
-                  ""
-                )
-              )}
-            </div>
-          </div>
+          <SummaryPage
+            key={key}
+            data={data}
+            fieldValues={fieldValues}
+            updatePayingMethod={updatePayingMethod}
+            printPricing={printPricing}
+          />
         ),
         (key) => (
           <div key={key} className="flex flex-row justify-between px-4 text-cgray-400 text-l md:text-2xl">
@@ -350,49 +270,32 @@ function App() {
     },
   ];
 
-  const onSubmit: SubmitHandler<IFormInput> = (data: any) => console.log(data);
+  const onSubmit: SubmitHandler<IFormInput> = () => console.log(data);
 
   return (
     <div className="h-screen flex flex-col justify-center items-center bg-cgray-400">
       <div className="h-full w-full md:p-4 md:h-csreen md:max-h-[800px] md:max-w-[1200px] bg-white md:flex md:items-center md:rounded-2xl md:shadow-lg">
         <div className="h-[calc(100%-20px)] md:w-full grid max-md:grid-rows-[min-content_1fr_min-content] md:grid-cols-[1fr_2fr] md:grid-rows-[1fr_60px] md:h-full md:relative md:gap-x-12 md:pr-12">
           <StepMenu menuSteps={menuSteps} onClick={goTo} currentStep={currentStep} />
-          <form onSubmit={handleSubmit(onSubmit)} id="form" className="relative max-md:max-h-[400px] transition">
-            <FormPage step={steps[currentStep]} />
-          </form>
-          <ButtonsBar
-            currentStep={currentStep}
-            length={menuSteps.length}
-            errors={formState.errors}
-            next={next}
-            back={back}
-          />
-          <div className="absolute left-4 top-4 text-red-500" onClick={() => console.log(errors)}>
-            ERRORS
-          </div>
+          {isSubmitSuccessful ? (
+            <SuccessPage />
+          ) : (
+            <>
+              <form onSubmit={handleSubmit(onSubmit)} id="form" className="relative max-md:max-h-[400px] transition">
+                <FormPage step={steps[currentStep]} />
+              </form>
+              <ButtonsBar currentStep={currentStep} length={menuSteps.length} next={next} back={back} />
+            </>
+          )}
+
+          {
+            window.testingMode && (
+              <TestingButton data={data} errors={errors} />
+            ) /*a button made purely for testing form fields, to enable it type window.testingMode=true in console;!!would be removed in the release version*/
+          }
         </div>
       </div>
-      <div className="text-sm align-center">
-        Challenge by{" "}
-        <a
-          href="https://www.frontendmentor.io?ref=challenge"
-          target="_blank"
-          className="text-blue-600"
-          rel="noopener noreferrer"
-        >
-          Frontend Mentor
-        </a>
-        . Coded by{" "}
-        <a
-          href="https://www.linkedin.com/in/dawid-bryja-898134249/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-blue-600"
-        >
-          Dawid Bryja
-        </a>
-        .
-      </div>
+      <Footer />
     </div>
   );
 }

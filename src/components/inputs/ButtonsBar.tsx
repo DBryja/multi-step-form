@@ -1,11 +1,10 @@
 interface IButtonsBar {
   currentStep: number;
   length: number;
-  errors: any;
   back: () => void;
   next: () => void;
 }
-export default function ButtonsBar({ currentStep, length, errors, back, next }: IButtonsBar) {
+export default function ButtonsBar({ currentStep, length, back, next }: IButtonsBar) {
   return (
     <div className="w-full pb-2 h-16 flex flex-row justify-between place-self-end px-8 md:px-24 font-medium items-center">
       {currentStep === 0 ? (
@@ -26,7 +25,6 @@ export default function ButtonsBar({ currentStep, length, errors, back, next }: 
         <input
           type="submit"
           value="Submit"
-          onClick={() => console.log(errors)}
           form="form"
           className="bg-cblue-700 h-[90%] px-8 text-white rounded-xl cursor-pointer transition-opacity hover:opacity-95"
         />

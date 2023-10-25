@@ -4,11 +4,11 @@ import { IFormFields } from "../../interfaces";
 
 export interface IRadioInput {
   name: string;
-  label: Plan;
+  label: Plan | string;
   price: number;
   img?: { src: string; alt: string };
   payingMethod?: string;
-  currentPlan?: Plan;
+  currentPlan?: Plan | string;
   handleChange?: (fields: Partial<IFormFields>) => void;
   [x: string]: any;
 }
@@ -27,13 +27,10 @@ export default function RadioInput({
 }: IRadioInput) {
   const isChecked = currentPlan === label;
   const classes = classNames(
-    "w-full h-full flex max-md:flex-row py-2 px-4 border rounded-2xl gap-4 transition-all duration-300 cursor-pointer [&>*]:pointer-events-none md:flex-col md:gap-8",
+    "w-full h-full flex max-md:flex-row py-2 px-4 border rounded-2xl gap-4 transition-all duration-300 cursor-pointer [&>*]:pointer-events-none md:flex-col md:gap-8 md:justify-center",
     {
-      "border-cgray-300": !isChecked,
-      "bg-cgray-200": isChecked,
-      "border-cblue-600": isChecked,
-      "scale-95": isChecked,
-      "hover:bg-cgray-200": !isChecked,
+      "bg-cgray-200 border-cblue-600 scale-95": isChecked,
+      "border-cgray-300 hover:bg-cgray-200": !isChecked,
     }
   );
   const isYearly = payingMethod === PayingMethod.YEAR;

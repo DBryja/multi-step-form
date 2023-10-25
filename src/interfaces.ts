@@ -42,8 +42,36 @@ export interface IFormFields {
   addOns: AddOnsObject;
 }
 
-// const obj = {
-//   addOns: {
-//     [label]: true;
-//   }
-// }
+interface ITextInput {
+  name: string;
+  label: string;
+  placeholder: string;
+}
+interface IRadioInput {
+  name: string;
+  img: {
+    src: string;
+    alt: string;
+  };
+  label: string;
+  price: number;
+  extra: string;
+}
+interface ICheckboxes {
+  name: string;
+  label: string;
+  heading: string;
+  desc: string;
+  price: number;
+}
+export interface IFieldValues {
+  textInputs: {
+    [key: string]: ITextInput;
+  };
+  radioInputs: {
+    [key: string]: IRadioInput;
+  };
+  checkboxes: {
+    [key: string]: ICheckboxes;
+  };
+}

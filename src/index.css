@@ -23,5 +23,6 @@
 @layer base {
   html {
     font-family: "Ubuntu", "Courier New", Courier, monospace;
+    -webkit-tap-highlight-color: transparent;
   }
 }

@@ -1,0 +1,74 @@
+{
+  "textInputs": {
+    "name": {
+      "name": "name",
+      "label": "Name",
+      "placeholder": "e.g Stephen King"
+    },
+    "email": {
+      "name": "email",
+      "label": "Email Address",
+      "placeholder": "e.g stephen@lorem.com"
+    },
+    "phone": {
+      "name": "phone",
+      "label": "Phone Number",
+      "placeholder": "e.g. +12 345 678 90"
+    }
+  },
+  "radioInputs": {
+    "arcade": {
+      "name": "plan",
+      "img": {
+        "src": "/images/icon-arcade.svg",
+        "alt": "Arcade"
+      },
+      "label": "arcade",
+      "price": 9,
+      "extra": "2 months free"
+    },
+    "advanced": {
+      "name": "plan",
+      "img": {
+        "src": "/images/icon-advanced.svg",
+        "alt": "Advance"
+      },
+      "label": "advanced",
+      "price": 12,
+      "extra": "2 months free"
+    },
+    "pro": {
+      "name": "plan",
+      "img": {
+        "src": "/images/icon-pro.svg",
+        "alt": "Pro"
+      },
+      "label": "pro",
+      "price": 15,
+      "extra": "2 months free"
+    }
+  },
+  "checkboxes": {
+    "onlineService": {
+      "name": "addOns",
+      "label": "onlineService",
+      "heading": "Online service",
+      "desc": "Access to multiplayer games",
+      "price": 1
+    },
+    "largerStorage": {
+      "name": "addOns",
+      "label": "largerStorage",
+      "heading": "Larger storage",
+      "desc": "extra 1TB of cloud save",
+      "price": 2
+    },
+    "customizableProfile": {
+      "name": "addOns",
+      "label": "customizableProfile",
+      "heading": "Customizable profile",
+      "desc": "Custom theme on your profile",
+      "price": 2
+    }
+  }
+}
