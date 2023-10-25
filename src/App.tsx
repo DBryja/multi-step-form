@@ -14,7 +14,6 @@ import SummaryPage from "./components/SummaryPage";
 
 import _fieldValues from "./content.json";
 import Footer from "./components/Footer";
-import TestingButton from "./components/TestingButton";
 import SuccessPage from "./components/SuccessPage";
 const fieldValues = _fieldValues as IFieldValues;
 
@@ -49,13 +48,6 @@ const menuSteps: IStepMenuItem[] = [
   },
 ];
 
-//remove in release version
-declare global {
-  interface Window {
-    testingMode: boolean;
-  }
-}
-
 function App() {
   const {
     handleSubmit,
@@ -63,14 +55,17 @@ function App() {
     formState: { errors, isSubmitSuccessful },
   } = useForm<IFormInput>({ mode: "all" });
   const { currentStep, goTo, next, back, data, updateData, updatePayingMethod } = useMultiStepForm(menuSteps.length);
+
   const isYearly = data.payingMethod === PayingMethod.YEAR;
   const printPricing = (price: number) => `$${price * (isYearly ? 10 : 1)}/${isYearly ? "yr" : "mo"}`;
+
   const addOnsPrice = Object.keys(data.addOns)
     .map((key) => {
       return (data.addOns[key as AddOns] && fieldValues.checkboxes[key].price) || 0;
     })
     .reduce((partialSum, a) => partialSum + a, 0);
   const price: number = fieldValues.radioInputs[data.plan].price + addOnsPrice;
+
   const steps: IStep[] = [
     {
       stepName: "Personal info",
@@ -287,12 +282,6 @@ function App() {
               <ButtonsBar currentStep={currentStep} length={menuSteps.length} next={next} back={back} />
             </>
           )}
-
-          {
-            window.testingMode && (
-              <TestingButton data={data} errors={errors} />
-            ) /*a button made purely for testing form fields, to enable it type window.testingMode=true in console;!!would be removed in the release version*/
-          }
         </div>
       </div>
       <Footer />

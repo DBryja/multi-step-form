@@ -4,11 +4,11 @@ import { IFormFields } from "../../interfaces";
 
 export interface IRadioInput {
   name: string;
-  label: Plan | string;
+  label: string;
   price: number;
   img?: { src: string; alt: string };
   payingMethod?: string;
-  currentPlan?: Plan | string;
+  currentPlan?: string;
   handleChange?: (fields: Partial<IFormFields>) => void;
   [x: string]: any;
 }

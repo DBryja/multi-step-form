@@ -13,21 +13,9 @@ const INIT_VALUES = {
     [AddOns.OS]: false,
   },
 };
-const INIT_VALUES_TEST = {
-  name: "Dawid Bryja",
-  email: "xileran@gmail.com",
-  phone: "+48 123456789",
-  payingMethod: PayingMethod.YEAR,
-  plan: Plan.PRO,
-  addOns: {
-    [AddOns.CP]: true,
-    [AddOns.LS]: false,
-    [AddOns.OS]: true,
-  },
-};
 export function useMultiStepForm(length: number) {
   const [currentStep, setCurrentStep] = useState(0);
-  const [data, setData] = useState<IFormFields>(INIT_VALUES_TEST);
+  const [data, setData] = useState<IFormFields>(INIT_VALUES);
 
   const updateData = (fields: Partial<IFormFields>) => {
     setData((prev) => {

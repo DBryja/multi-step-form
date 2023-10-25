@@ -9,16 +9,12 @@ interface IPayToggle {
 }
 export default function PayToggle({ name, payingMethod, handleChange }: IPayToggle) {
   const isActive = payingMethod === PayingMethod.YEAR;
-  const leftClasses = classNames("transition-colors font-medium", {
-    "text-cgray-400": isActive,
-    "text-cblue-600": !isActive,
-  });
-  const rightClasses = classNames("transition-colors font-medium", {
+  const sideClasses = classNames("transition-colors font-medium", {
     "text-cgray-400": !isActive,
     "text-cblue-600": isActive,
   });
 
-  const onChange = (e: React.SyntheticEvent) => {
+  const onChange = () => {
     handleChange?.();
   };
   return (
@@ -28,10 +24,10 @@ export default function PayToggle({ name, payingMethod, handleChange }: IPayTogg
         htmlFor={name}
         className="flex flex-row w-full justify-evenly [&>p]:leading-8 md:cursor-pointer md:bg-cgray-200 md:py-4 md:px-8 rounded-xl [&>*]:pointer-events-none"
       >
-        <p className={leftClasses}>Monthly</p>
+        <p className={sideClasses}>Monthly</p>
         <Toggle isActive={isActive} />
-        <p className={rightClasses}>Yearly</p>
-      </label>{" "}
+        <p className={sideClasses}>Yearly</p>
+      </label>
     </div>
   );
 }

@@ -1,7 +1,7 @@
-import { IFormFields, AddOns, AddOnsObject, PayingMethod } from "../../interfaces";
+import { IFormFields, AddOnsObject, PayingMethod } from "../../interfaces";
 interface ICheckboxInput {
   name: string;
-  label: AddOns | string;
+  label: string;
   heading: string;
   desc: string;
   payingMethod?: PayingMethod;
