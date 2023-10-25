@@ -11,14 +11,10 @@ interface IStepMenuItemElement {
 export default function StepMenuItem({ step, onClick, current }: IStepMenuItemElement) {
   let active = current === step.listpos ? true : false;
   const classes = classNames(
-    "w-10 h-10 md:w-12 md:h-12 rounded-full border text-center relative md:cursor-pointer md:text-xl",
+    "w-10 h-10 md:w-12 md:h-12 rounded-full border text-center relative md:cursor-pointer md:text-xl transition-colors duration-300",
     {
-      "text-white": !active,
-      "border-white": !active,
-      "bg-none": !active,
-      "text-black": active,
-      "border-cblue-200": active,
-      "bg-cblue-200": active,
+      "text-black border-cblue-200 bg-cblue-200": active,
+      "text-white border-white bg-none": !active,
     }
   );
 
