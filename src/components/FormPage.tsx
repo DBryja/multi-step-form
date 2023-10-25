@@ -8,7 +8,7 @@ interface IFormPage {
 }
 
 export default function FormPage({ step }: IFormPage) {
-  const isPlan = step.menuItem.listpos === 1 && !isMedium(window);
+  const isPlan = step.menuItem.listpos === 1 && isMedium(window);
   const classes = classNames("", {
     "md:h-full md:grid md:grid-cols-3 md:grid-rows-[250px_200px] md:gap-x-8": isPlan,
     "flex flex-col gap-4 md:gap-8  w-full": !isPlan,

@@ -1,46 +1,49 @@
-# Getting Started with Create React App
+# Frontend Mentor - Multi-step form solution
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is a solution to the [Multi-step form challenge on Frontend Mentor](https://www.frontendmentor.io/challenges/multistep-form-YVAnSdqQBJ). Frontend Mentor challenges help you improve your coding skills by building realistic projects.
 
-## Available Scripts
+## Table of contents
 
-In the project directory, you can run:
+- [Instructions](#instructions)
+- [My process](#my-process)
+  - [Built with](#built-with)
+  - [Continued development](#continued-development)
+- [Author](#author)
 
-### `npm start`
+## Instructions
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+After downloading the project open the terminal and run:
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- Installing node modules:
 
-### `npm test`
+  - npm install
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Running developer version
 
-### `npm run build`
+  - npm run start
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Running production version
+  - npm run build
+    - serve -s build //run static server using production version
+    - npm run eject //delete the production version
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## My process
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Built with
 
-### `npm run eject`
+- Mobile-first workflow
+- [TypeScript](https://www.typescriptlang.org/) - JS language extension
+- [React](https://reactjs.org/) - JS library
+- [TailwindCSS](https://tailwindcss.com/) - CSS framework
+- [ReactHookForm](https://react-hook-form.com/) - React Hook
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Continued development
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+I'm not really glad of the outcome.
+There is a lot of place for improvement, as I have added the react-hook-form in the middle of development, my project is not written with this feature in mind, thus this results in combination of two methods - state managment for storing data and updating fields and react-hook-form only for validation, lowering the performence.
+I should replace current(state managment) input subscription with "watch" tool, which decreases the amount of components rerendering, what would significantly increase the efficiency.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Author
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+    https://github.com/DBryja/
+    https://www.linkedin.com/in/dawid-bryja-898134249/

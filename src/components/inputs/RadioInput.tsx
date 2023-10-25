@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { PayingMethod, Plan } from "../../interfaces";
+import { PayingMethod } from "../../interfaces";
 import { IFormFields } from "../../interfaces";
 
 export interface IRadioInput {
