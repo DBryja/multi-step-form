@@ -44,6 +44,7 @@ There is a lot of place for improvement, as I have added the react-hook-form in 
 I should replace current(state managment) input subscription with "watch" tool, which decreases the amount of components rerendering, what would significantly increase the efficiency.
 
 ## Author
-
-    https://github.com/DBryja/
-    https://www.linkedin.com/in/dawid-bryja-898134249/
+- [GitHub](https://github.com/DBryja/) DBryja
+- [LinkedIn](https://www.linkedin.com/in/dawid-bryja-898134249/) Dawid Bryja
+    
+    
