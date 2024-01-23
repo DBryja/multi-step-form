@@ -11,12 +11,7 @@ export default function Footer() {
         Frontend Mentor
       </a>
       . Coded by{" "}
-      <a
-        href="https://www.linkedin.com/in/dawid-bryja-898134249/"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-blue-600"
-      >
+      <a href="https://github.com/DBryja" target="_blank" rel="noopener noreferrer" className="text-blue-600">
         Dawid Bryja
       </a>
       .

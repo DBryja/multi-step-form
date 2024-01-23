@@ -9,6 +9,7 @@ interface ITextInput {
   value: string;
   onChange?: (e: React.SyntheticEvent) => void;
   onBlur?: Noop;
+  required?: boolean;
   [x: string]: any;
 }
 
@@ -21,6 +22,7 @@ export default function TextInput({
   value,
   onChange,
   onBlur,
+  required,
   ...rest
 }: ITextInput) {
   const inputClasses = classNames(
@@ -50,6 +52,7 @@ export default function TextInput({
         {...rest}
         onChange={onValueChange}
         onBlur={onBlur}
+        required={required}
       />
     </div>
   );

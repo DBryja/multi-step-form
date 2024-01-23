@@ -1,7 +1,7 @@
 import { useMultiStepForm } from "./hooks/useMultistepForm";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 
-import { IStepMenuItem, IStep, Plan, PayingMethod, AddOns, IFieldValues } from "./interfaces";
+import { IStepMenuItem, IStep, Plan, PayingMethod, AddOns, IFieldValues, AddOnsObject } from "./interfaces";
 import { required, isEmail, isPhoneNumber } from "./utils/validators";
 import StepMenu from "./components/StepMenu";
 import FormPage from "./components/FormPage";
@@ -23,7 +23,7 @@ interface IFormInput {
   phone: string;
   plan: Plan;
   payingMethod: PayingMethod;
-  addOns: AddOns;
+  addOns: AddOnsObject;
 }
 const menuSteps: IStepMenuItem[] = [
   {
@@ -49,12 +49,14 @@ const menuSteps: IStepMenuItem[] = [
 ];
 
 function App() {
+  const { currentStep, goTo, next, back, data, updateData, updatePayingMethod } = useMultiStepForm(menuSteps.length);
+
   const {
     handleSubmit,
     control,
     formState: { errors, isSubmitSuccessful },
-  } = useForm<IFormInput>({ mode: "all" });
-  const { currentStep, goTo, next, back, data, updateData, updatePayingMethod } = useMultiStepForm(menuSteps.length);
+    trigger,
+  } = useForm<IFormInput>({ mode: "all", defaultValues: { ...data, addOns: { ...data.addOns } } });
 
   const isYearly = data.payingMethod === PayingMethod.YEAR;
   const printPricing = (price: number) => `$${price * (isYearly ? 10 : 1)}/${isYearly ? "yr" : "mo"}`;
@@ -265,14 +267,18 @@ function App() {
     },
   ];
 
-  const onSubmit: SubmitHandler<IFormInput> = () => console.log(data);
+  let isValid = false;
+  const onSubmit: SubmitHandler<IFormInput> = async (e) => {
+    isValid = await trigger();
+    console.log(isValid, { ...data }, errors);
+  };
 
   return (
     <div className="h-screen flex flex-col justify-center items-center bg-cgray-400">
       <div className="h-full w-full md:p-4 md:h-csreen md:max-h-[800px] md:max-w-[1200px] bg-white md:flex md:items-center md:rounded-2xl md:shadow-lg">
         <div className="h-[calc(100%-20px)] md:w-full grid max-md:grid-rows-[min-content_1fr_min-content] md:grid-cols-[1fr_2fr] md:grid-rows-[1fr_60px] md:h-full md:relative md:gap-x-12 md:pr-12">
           <StepMenu menuSteps={menuSteps} onClick={goTo} currentStep={currentStep} />
-          {isSubmitSuccessful ? (
+          {isSubmitSuccessful && isValid ? (
             <SuccessPage />
           ) : (
             <>
