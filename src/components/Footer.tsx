@@ -12,7 +12,7 @@ export default function Footer() {
       </a>
       . Coded by{" "}
       <a
-        href="https://www.linkedin.com/in/dawid-bryja-898134249/"
+        href="https://github.com/DBryja"
         target="_blank"
         rel="noopener noreferrer"
         className="text-blue-600"
