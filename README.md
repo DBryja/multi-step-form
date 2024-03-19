@@ -1,8 +1,8 @@
 # Frontend Mentor - Multi-step form solution
 
-This is a solution to the [Multi-step form challenge on Frontend Mentor](https://www.frontendmentor.io/challenges/multistep-form-YVAnSdqQBJ). 
-Frontend Mentor challenges help you improve your coding skills by building realistic projects.
-Live version - [https://multi-step-form-dbryja.vercel.app/](https://multi-step-form-dbryja.vercel.app/)
+This is a solution to the [Multi-step form challenge on Frontend Mentor](https://www.frontendmentor.io/challenges/multistep-form-YVAnSdqQBJ). <br/>
+Frontend Mentor challenges help you improve your coding skills by building realistic projects. <br />
+**Live preview** - [https://multi-step-form-dbryja.vercel.app/](https://multi-step-form-dbryja.vercel.app/)
 
 ## Table of contents
 
